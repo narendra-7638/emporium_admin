@@ -12,6 +12,5 @@ export class AuthService {
 
   login(data): Observable<any>{
     return this.http.post(`${baseUrl}user/signin`, data, {observe: 'response'})
-
   }
 }

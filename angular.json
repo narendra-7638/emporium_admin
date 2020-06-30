@@ -127,5 +127,8 @@
       }
     }
   },
-  "defaultProject": "emporium"
+  "defaultProject": "emporium",
+  "cli": {
+    "analytics": false
+  }
 }
