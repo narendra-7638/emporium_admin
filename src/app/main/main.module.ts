@@ -12,7 +12,7 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatCardModule } from '@angular/material/card';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatTableModule } from '@angular/material/table';
-
+import { MatIconModule} from '@angular/material/icon';
 @NgModule({
   declarations: [MainComponent, DashboardComponent, CustomersComponent, CategoriesComponent, ProductsComponent],
   imports: [
@@ -23,7 +23,8 @@ import { MatTableModule } from '@angular/material/table';
     MatDividerModule,
     MatCardModule,
     MatPaginatorModule,
-    MatTableModule
+    MatTableModule,
+    MatIconModule
   ]
 })
 export class MainModule { }
