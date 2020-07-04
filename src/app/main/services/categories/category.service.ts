@@ -3,30 +3,22 @@ import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { baseUrl } from 'src/environments/environment';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { IProducts } from './../../model/Products';
+import { ICategory } from '../../model/Category';
+
 @Injectable({
   providedIn: 'root'
 })
-export class ProductService {
+export class CategoryService {
 
   constructor(private http: HttpClient) { }
 
   public form: FormGroup = new FormGroup({
     name: new FormControl('', [Validators.required]),
-    price: new FormControl('', [Validators.pattern("^[0-9]*$")]),
-    size: new FormControl([], []),
-    details: new FormControl('', [Validators.required]),
-    features: new FormControl('', []),
-    primary_pic: new FormControl('', [Validators.required]),
-    secondary_pics: new FormControl([]),
-    is_active: new FormControl(false, []),
-    is_trending: new FormControl(false, []),
-    is_featured: new FormControl(false, []),
-    category: new FormControl('', [Validators.required])
+    details: new FormControl('', []),
+    icon: new FormControl('', [Validators.required]),
   })
 
-  getProducts(skip: Number, limit: Number, filter: String = ""): Observable<any> {
-
+  getList(skip: Number, limit: Number, filter: String = ""): Observable<any> {
     let params: HttpParams = new HttpParams();
     
     params = params.set('skip', skip.toString())
@@ -35,16 +27,15 @@ export class ProductService {
     if(filter.length > 0){
       params = params.set('filter', filter.toString())
     }
-    
-    return this.http.get(`${baseUrl}products`, {
+    return this.http.get(`${baseUrl}category`, {
       headers: new HttpHeaders().set("authorization", localStorage.getItem('token')),
       observe: 'response',
       params: params
     })
   }
 
-  saveProduct(data: IProducts): Observable<any> {
-    return this.http.post(`${baseUrl}products`, data, {
+  save(data: ICategory): Observable<any>{
+    return this.http.post(`${baseUrl}category`, data, {
       headers: new HttpHeaders().set("authorization", localStorage.getItem('token')),
       observe: 'response'
     })

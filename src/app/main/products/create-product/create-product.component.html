@@ -1,0 +1,122 @@
+
+<div class="loading-indicator" *ngIf= "isLoading">
+    <mat-progress-spinner [color]="color" mode="indeterminate"></mat-progress-spinner>
+</div>
+
+<mat-toolbar color="primary">
+    <span>Create Product</span>
+    <span class="example-spacer"></span>
+    <button mat-icon-button class="example-icon" aria-label="Example icon-button with share icon" (click)="close()">
+      <mat-icon>close</mat-icon>
+    </button>
+  </mat-toolbar>
+
+<form [formGroup]="formGroup" class="normal-form example-form" >
+    <mat-grid-list cols="3" rowHeight="700px">
+        <mat-grid-tile colspan="2">
+            <div class="control-container">
+                <mat-form-field class="example-full-width">
+                    <mat-label>Name</mat-label>
+                    <input matInput placeholder="Ex. Pizza" value="" formControlName="name">
+                    <mat-hint>This name will be shown on App</mat-hint>
+                    <mat-error *ngIf="formGroup.get('name').invalid">
+                        Name is <strong>required</strong>
+                    </mat-error>
+                </mat-form-field>
+                <mat-form-field class="example-full-width">
+                    <mat-label>Price</mat-label>
+                    <input type="number" matInput placeholder="Ex. Pizza" value="" formControlName="price">
+                </mat-form-field>
+                <mat-form-field class="example-full-width">
+                    <mat-label>Size</mat-label>
+                    <!-- <input type="number" matInput placeholder="Ex. Pizza" value="" formControlName="size"> -->
+                    <mat-select formControlName="size" multiple>
+                        <mat-option *ngFor="let size of sizeList" [value]="size">{{size}}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <mat-form-field class="example-full-width">
+                    <mat-label>Details</mat-label>
+                    <textarea matInput placeholder="Write details of this product" value="" formControlName="details"></textarea>
+                </mat-form-field>
+                
+                <mat-form-field class="example-full-width">
+                    <mat-label>Features</mat-label>
+                    <textarea matInput placeholder="Write features of this product" value="" formControlName="features"></textarea>
+                </mat-form-field>
+
+                <div class="add-bottom-padding">
+                    <mat-card style="margin-top:10px; width: 50%;">   
+                        <mat-card-actions>
+                            <input type="file" #fileUpload id="fileUpload" name="fileUpload" multiple="multiple" accept="image/*" style="display:none;" />
+                            <button mat-button color="warn" (click)="upload()">  
+                                <mat-icon>file_upload</mat-icon>  
+                                Upload  
+                            </button>
+                            
+                            <mat-hint>This Pic will be shown on App</mat-hint>
+                            <mat-error *ngIf="formGroup.get('primary_pic').invalid && isSubmit">
+                                Photo is <strong>required</strong>
+                            </mat-error>
+                        </mat-card-actions>  
+                    </mat-card>
+                    
+                </div>                
+                
+                <div class="add-bottom-padding">
+                    <mat-label>Status</mat-label>
+                    <mat-radio-group aria-label="Select an option" class="example-full-width pull-right" formControlName="is_active">
+                        <mat-radio-button matInput value="true">Active</mat-radio-button>
+                        <mat-radio-button matInput value="false">InActive</mat-radio-button>
+                    </mat-radio-group>
+                </div>
+                
+                <div class="add-bottom-padding">
+                    <mat-label>Featured</mat-label>
+                    <mat-radio-group aria-label="Select an option" class="example-full-width pull-right" formControlName="is_featured">
+                        <mat-radio-button matInput value="true">Yes</mat-radio-button>
+                        <mat-radio-button checked matInput value="false">No</mat-radio-button>
+                    </mat-radio-group>
+                </div>
+
+                <div class="add-bottom-padding">
+                    <mat-label>Trending</mat-label>
+                    <mat-radio-group aria-label="Select an option" class="example-full-width pull-right" formControlName="is_trending">
+                        <mat-radio-button matInput value="true">Yes</mat-radio-button>
+                        <mat-radio-button checked matInput value="false">No</mat-radio-button>
+                    </mat-radio-group>
+                </div>
+                
+                <mat-form-field appearance="fill">
+                    <mat-label>Select Category</mat-label>
+                    <mat-select formControlName="category">
+                        <mat-option>None</mat-option>
+                        <mat-option *ngFor="let cat of catList" value="{{cat._id}}">{{cat.name}}</mat-option>                        
+                    </mat-select>
+                </mat-form-field>
+
+            </div>
+        </mat-grid-tile>
+        <mat-grid-tile colspan="1">
+            <mat-card *ngIf="image !== ''" class="example-card">
+                <mat-card-header>
+                  <div mat-card-avatar class="example-header-image"></div>
+                  <mat-card-title>Product Image</mat-card-title>
+                  <mat-card-subtitle>View</mat-card-subtitle>
+                </mat-card-header>
+                <img mat-card-image src="{{image}}" alt="Product Image">
+                
+            </mat-card>
+        
+        </mat-grid-tile>
+        
+    </mat-grid-list>
+
+    <mat-grid-list cols="4" rowHeight="30px">
+        <mat-grid-tile colspan="1" rowspan="1">
+            <button color="primary" mat-raised-button type="button" (click)="addCat()">Add Category</button>
+        </mat-grid-tile>
+        <mat-grid-tile colspan="3" rowspan="1">
+            <button color="primary" [disabled]="!formGroup.valid" mat-raised-button type="submit" (click)="save()">Save</button>
+        </mat-grid-tile>
+    </mat-grid-list>
+</form>

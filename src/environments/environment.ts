@@ -9,6 +9,13 @@ export const environment = {
 // export const baseUrl = "http://18.222.143.146:3000/api/";
 export const baseUrl = "http://localhost:3000/api/";
 
+
+export const s3Creds = {
+  accessKeyId: 'AKIAWO4MZZPDBYRX5FGF',
+  secretAccessKey: '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',
+  region: 'ap-south-1',
+  bucket: 'mediafolderapp'
+}
 /*
  * For easier debugging in development mode, you can import the following file
  * to ignore zone related error stack frames such as `zone.run`, `zoneDelegate.invokeTask`.

@@ -14,11 +14,13 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MainModule } from './main/main.module';
-
+import { MessageComponent } from './message/message.component';
+import { MatDialogModule } from '@angular/material/dialog';
 @NgModule({
   declarations: [
     AppComponent,
-    LoginComponent
+    LoginComponent,
+    MessageComponent
   ],
   imports: [
     BrowserModule,

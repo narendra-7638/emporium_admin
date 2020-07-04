@@ -1,9 +1,13 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { Router } from '@angular/router';
 import { IProducts } from './../model/Products';
-import {MatPaginator, PageEvent} from '@angular/material/paginator';
-import {MatTableDataSource} from '@angular/material/table';
-
-import { ProductService} from './../services/products/product.service';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
+import { MatTableDataSource } from '@angular/material/table';
+import { MatDialog, MatDialogConfig, MatDialogRef, MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
+import { ProductService } from './../services/products/product.service';
+import { CreateProductComponent } from './create-product/create-product.component';
+import { MessageComponent } from './../../message/message.component';
+import {ThemePalette} from '@angular/material/core';
 
 @Component({
   selector: 'app-products',
@@ -11,45 +15,102 @@ import { ProductService} from './../services/products/product.service';
   styleUrls: ['./products.component.scss']
 })
 export class ProductsComponent implements OnInit {
-  displayedColumns: string[] = ['name', 'price', 'created_on', 'is_active', 'actions'];
-  dataSource = new MatTableDataSource<IProducts>([]);
-  pageEvent:PageEvent;
+  
+  public displayedColumns: string[] = ['name', 'price', 'created_on', 'is_active', 'actions'];
+  public dataSource = new MatTableDataSource<IProducts>([]);
+  public pageEvent: PageEvent;
 
-  length = 100;
-  pageSize = 20;
-  pageSizeOptions: number[] = [5, 10, 25, 100];
+  public length = 100;
+  public pageSize = 20;
+  public pageSizeOptions: number[] = [5, 10, 25, 100];
 
-  constructor(private prodService: ProductService) { }
+  public skip: Number = 0;
+  public limit: Number = this.pageSize;
+  public search: String;
 
-  @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
+  public isLoading: Boolean = false;
+  public color: ThemePalette = "primary";
+
+  constructor(
+    private prodService: ProductService,
+    private dialog: MatDialog,
+    private dialogMessage: MatDialog,
+    private router: Router
+  ) { }
+
+  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
 
   ngOnInit() {
+    this.search = "";
     this.dataSource.paginator = this.paginator;
-    this.fetchAgain(0, this.pageSize);
+    this.fetchAgain(0, this.pageSize, this.search);
   }
 
-  fetchAgain(skip: Number, limit: Number){
-    this.prodService.getProducts(skip, limit)
-    .subscribe( res=> {
-      if(res.status === 200){
-        this.dataSource = res.body.data.list;
-        this.length = res.body.data.count;
-      }
-    })
+  fetchAgain(skip: Number, limit: Number, filter: String) {
+    this.isLoading = true;
+    this.prodService.getProducts(skip, limit, filter)
+      .subscribe(res => {
+        this.isLoading = false;
+        if (res.status === 200) {
+          this.dataSource = res.body.data.list;
+          this.length = res.body.data.count;
+          // this.openDialog("Success", res.body.message);
+        }
+      }, err => {
+        this.isLoading = false;
+        if (err.status === 401) {
+          this.openDialog("Error", err.error.message);
+          localStorage.removeItem('token');
+          this.router.navigate(['login']);
+        } else if(err.status === 400){
+          this.openDialog("Error", err.error.message);
+          // alert('Validation error');
+        }else if(err.status === 404){
+          this.openDialog("Error", err.error.message);
+          // alert("User not found");
+        }else{
+          this.openDialog("Error", err.error.message);
+          // alert("oops server error");
+        }
+      })
   }
 
-  action(event: PageEvent){
-    let skip: Number = event.pageIndex * event.pageSize;
-    let limit: Number = event.pageSize;
-    this.fetchAgain(skip, limit);
+  filterAction(){
+    this.fetchAgain(this.skip, this.limit, this.search);
+    // localStorage.removeItem('token');
+    this.fetchAgain(this.skip, this.limit, this.search);
+  }
+  action(event: PageEvent) {
+    this.skip = event.pageIndex * event.pageSize;
+    this.limit = event.pageSize;
+    this.fetchAgain(this.skip, this.limit, this.search);
   }
 
-  delete(data:IProducts){
+  delete(data: IProducts) {
     console.log(data);
   }
 
-  openCreate(){
+  openCreate() {
+    const dialogConfig: MatDialogConfig = new MatDialogConfig();
+    dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+    dialogConfig.width = "80%";
+    const dialogRef = this.dialog.open(CreateProductComponent, dialogConfig);
     
+    dialogRef.afterClosed()
+    .subscribe(result => {
+      this.filterAction();
+    })
+  }
+
+  openDialog(status: String, message: String){
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.width = "50%";
+    dialogConfig.data = {
+      status: status,
+      message: message
+    }
+    this.dialogMessage.open(MessageComponent, dialogConfig);
   }
   
 }

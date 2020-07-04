@@ -1,0 +1,73 @@
+
+<div class="loading-indicator" *ngIf= "isLoading">
+    <mat-progress-spinner [color]="color" mode="indeterminate"></mat-progress-spinner>
+</div>
+
+<mat-toolbar color="primary">
+    <span>Create Category</span>
+    <span class="example-spacer"></span>
+    <button mat-icon-button class="example-icon" aria-label="Example icon-button with share icon" (click)="close()">
+      <mat-icon>close</mat-icon>
+    </button>
+  </mat-toolbar>
+
+<form [formGroup]="formGroup" class="normal-form example-form" >
+    <mat-grid-list cols="3" rowHeight="500px">
+        <mat-grid-tile colspan="2">
+            <div class="control-container">
+                <mat-form-field class="example-full-width">
+                    <mat-label>Name</mat-label>
+                    <input matInput placeholder="Ex. Pizza" value="" formControlName="name">
+                    <mat-hint>This name will be shown on App</mat-hint>
+                    <mat-error *ngIf="formGroup.get('name').invalid">
+                        Name is <strong>required</strong>
+                    </mat-error>
+                </mat-form-field>
+
+                <mat-form-field class="example-full-width">
+                    <mat-label>Details</mat-label>
+                    <textarea matInput placeholder="Write features of this product" value="" formControlName="details"></textarea>
+                </mat-form-field>
+
+                <div class="add-bottom-padding">
+                    <mat-card style="margin-top:10px; width: 50%;">   
+                        <mat-card-actions>
+                            <input type="file" #fileUpload id="fileUpload" name="fileUpload" multiple="multiple" accept="image/*" style="display:none;" />
+                            <button mat-button color="warn" (click)="upload()">  
+                                <mat-icon>file_upload</mat-icon>  
+                                Upload  
+                            </button>
+                            
+                            <mat-hint>This Pic will be shown on App</mat-hint>
+                            <mat-error *ngIf="formGroup.get('icon').invalid && isSubmit">
+                                Photo is <strong>required</strong>
+                            </mat-error>
+                        </mat-card-actions>  
+                    </mat-card>
+                    
+                </div>
+
+            </div>
+        </mat-grid-tile>
+
+        <mat-grid-tile colspan="1">
+            <mat-card *ngIf="image !== ''" class="example-card">
+                <mat-card-header>
+                  <div mat-card-avatar class="example-header-image"></div>
+                  <mat-card-title>Category Image</mat-card-title>
+                  <mat-card-subtitle>View</mat-card-subtitle>
+                </mat-card-header>
+                <img mat-card-image src="{{image}}" alt="Product Image">
+                
+            </mat-card>
+        
+        </mat-grid-tile>
+        
+    </mat-grid-list>
+
+    <mat-grid-list cols="3" rowHeight="30px">
+        <mat-grid-tile colspan="3" rowspan="1">
+            <button color="primary" [disabled]="!formGroup.valid" mat-raised-button type="submit" (click)="save()">Save</button>
+          </mat-grid-tile>
+    </mat-grid-list>
+</form>
