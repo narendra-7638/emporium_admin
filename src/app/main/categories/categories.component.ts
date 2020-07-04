@@ -75,7 +75,6 @@ export class CategoriesComponent implements OnInit {
   }
 
   filterAction() {
-
     this.fetchAgain(this.skip, this.limit, this.search);
   }
 
@@ -90,7 +89,12 @@ export class CategoriesComponent implements OnInit {
     dialogConfig.disableClose = true;
     dialogConfig.autoFocus = true;
     dialogConfig.width = "50%";
-    this.dialog.open(CreateCategoryComponent, dialogConfig);
+    const dialogRef = this.dialog.open(CreateCategoryComponent, dialogConfig);
+
+    dialogRef.afterClosed()
+    .subscribe(result => {
+      this.filterAction();
+    })
   }
 
   openDialog(status: String, message: String){
