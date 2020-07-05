@@ -16,7 +16,7 @@ import { MessageComponent} from './../../message/message.component';
 })
 export class CategoriesComponent implements OnInit {
 
-  public displayedColumns: string[] = ['name', 'details', 'created_on', 'icon'];
+  public displayedColumns: string[] = ['name', 'details', 'created_on', 'actions'];
   public dataSource = new MatTableDataSource<ICategory>([]);
   public pageEvent: PageEvent;
 

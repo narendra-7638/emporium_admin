@@ -30,10 +30,11 @@
 
       <ng-container matColumnDef="is_blocked">
         <th mat-header-cell *matHeaderCellDef> Status </th>
-        <td mat-cell *matCellDef="let element"> {{element.is_blocked ? "BLOCKED" : "ACTIVE"}} </td>
+        <td mat-cell *matCellDef="let element"> 
+          <button *ngIf="element.is_blocked" mat-raised-button color="primary" style="width:80px">Unblock</button>
+          <button *ngIf="!element.is_blocked" mat-raised-button color="warn" style="width:80px">Block</button>
+        </td>
       </ng-container>
-
-
 
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
       <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>

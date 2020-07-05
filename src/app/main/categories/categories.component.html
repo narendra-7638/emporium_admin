@@ -16,7 +16,7 @@
   <mat-grid-tile colspan="10">
     <div class="control-container">
       <mat-form-field>
-        <mat-label>Filter</mat-label>
+        <mat-label>Search</mat-label>
         <input type="text" matInput (keyup)="filterAction()" placeholder="Ex. ium" #input [(ngModel)]="search">
       </mat-form-field>
     </div>
@@ -45,11 +45,13 @@
         <td mat-cell *matCellDef="let element"> {{element.created_on}} </td>
       </ng-container>
 
-      <ng-container matColumnDef="icon">
-        <th mat-header-cell *matHeaderCellDef> Icon </th>
-        <td mat-cell *matCellDef="let element"> <img style="width: 180px; height: 180px;" src="{{element.icon}}"> </td>
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef> Action </th>
+        <td mat-cell *matCellDef="let element">
+          <button mat-icon-button ><mat-icon>build_circle</mat-icon></button>
+          <button mat-icon-button (click)="delete(element)"><mat-icon>delete_outline</mat-icon></button>
+        </td>
       </ng-container>
-
 
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
       <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
