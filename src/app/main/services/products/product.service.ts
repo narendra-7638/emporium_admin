@@ -18,11 +18,13 @@ export class ProductService {
     details: new FormControl('', [Validators.required]),
     features: new FormControl('', []),
     primary_pic: new FormControl('', [Validators.required]),
-    secondary_pics: new FormControl([]),
+    secondary_pics: new FormControl([], []),
     is_active: new FormControl(false, []),
     is_trending: new FormControl(false, []),
     is_featured: new FormControl(false, []),
-    category: new FormControl('', [Validators.required])
+    category: new FormControl('', [Validators.required]),
+    type: new FormControl(0),
+    total_quantity: new FormControl(0)
   })
 
   getProducts(skip: Number, limit: Number, filter: String = ""): Observable<any> {

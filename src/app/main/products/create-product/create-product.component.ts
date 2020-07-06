@@ -4,10 +4,12 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { UploadService } from './../../services/upload.service';
 import { MatDialogRef, MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { CategoryService } from './../../services/categories/category.service';
-import {ThemePalette} from '@angular/material/core';
+import { ThemePalette } from '@angular/material/core';
 import { CreateCategoryComponent } from '../../categories/create-category/create-category.component';
-import {MessageComponent} from './../../../message/message.component';
-import {Router} from '@angular/router';
+import { MessageComponent } from './../../../message/message.component';
+import { Router } from '@angular/router';
+import { IProductType } from './../../model/Products';
+
 
 @Component({
   selector: 'app-create-product',
@@ -25,7 +27,12 @@ export class CreateProductComponent implements OnInit {
 
   public isLoading: Boolean = false;
   public color: ThemePalette = "primary";
-  public sizeList: Array<Number> = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15];
+  public sizeList: Array<Number> = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15];
+
+  public productType: Array<IProductType> = [
+    { id: 0, name: "Normal" },
+    { id: 1, name: "Mask" }
+  ]
 
   constructor(
     public catService: CategoryService,
@@ -71,13 +78,13 @@ export class CreateProductComponent implements OnInit {
             this.openDialog("Error", err.error.message);
             localStorage.removeItem('token');
             this.router.navigate(['login']);
-          } else if(err.status === 400){
+          } else if (err.status === 400) {
             this.openDialog("Error", err.error.message);
             // alert('Validation error');
-          }else if(err.status === 404){
+          } else if (err.status === 404) {
             this.openDialog("Error", err.error.message);
             // alert("User not found");
-          }else{
+          } else {
             this.openDialog("Error", err.error.message);
             // alert("oops server error");
           }
@@ -158,7 +165,7 @@ export class CreateProductComponent implements OnInit {
       })
   }
 
-  openDialog(status: String, message: String){
+  openDialog(status: String, message: String) {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.width = "50%";
     dialogConfig.data = {

@@ -13,3 +13,8 @@ export interface IProducts {
     is_featured: Boolean,
     created_on: String
   }
+
+  export interface IProductType {
+    id: Number,
+    name: String
+  }
