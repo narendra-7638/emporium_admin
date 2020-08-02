@@ -22,9 +22,16 @@ form.normal-form{
     padding: 5%;
 }
 
+.control-container-img{
+    margin-bottom: 20px;
+    width: 50%;
+    padding: 10px;
+}
+
 .control-container > *{
     width: 100%;
 }
+
 
 .mat-radio-button ~ .mat-radio-button {
     margin-left: 16px;

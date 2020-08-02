@@ -13,8 +13,8 @@
 
 <div style = "height: 550px;overflow-y: scroll;">
     <form [formGroup]="formGroup" class="normal-form example-form">
-        <mat-grid-list cols="3" rowHeight="780px">
-            <mat-grid-tile colspan="2">
+        <mat-grid-list cols="5" rowHeight="780px">
+            <mat-grid-tile colspan="3">
                 <div class="control-container">
                     <mat-form-field class="example-full-width">
                         <mat-label>Name</mat-label>
@@ -109,16 +109,18 @@
     
                 </div>
             </mat-grid-tile>
-            <mat-grid-tile colspan="1">
-                <mat-card *ngIf="image !== ''" class="example-card">
-                    <mat-card-header>
-                      <div mat-card-avatar class="example-header-image"></div>
-                      <mat-card-title>Product Image</mat-card-title>
-                      <mat-card-subtitle>View</mat-card-subtitle>
-                    </mat-card-header>
-                    <img mat-card-image src="{{image}}" alt="Product Image">
-                    
-                </mat-card>
+            <mat-grid-tile colspan="2">
+                <div class="control-container-img" >
+                    <mat-card class="example-card" style="margin-top: 5px;" *ngFor="let image of imagesList;">
+                        <!-- <mat-card-header>
+                          <div mat-card-avatar class="example-header-image"></div>
+                          <mat-card-title>Product Image</mat-card-title>
+                          <mat-card-subtitle>View</mat-card-subtitle>
+                        </mat-card-header> -->
+                        <img mat-card-image style="height: 150px; width:100%;" src="{{image}}" alt="Product Image">
+                        
+                    </mat-card>
+                </div>
             
             </mat-grid-tile>
             
@@ -129,8 +131,12 @@
                 <button color="primary" mat-raised-button type="button" (click)="addCat()">Add Category</button>
             </mat-grid-tile>
             <mat-grid-tile colspan="3" rowspan="1">
-                <button color="primary" [disabled]="!formGroup.valid" mat-raised-button type="submit" (click)="save()">Save</button>
+                <button color="primary" [disabled]="!formGroup.valid" mat-raised-button type="submit" (click)="uploadFiles()">Save</button>
             </mat-grid-tile>
         </mat-grid-list>
     </form>
+</div>
+
+<div>
+    
 </div>

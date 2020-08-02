@@ -9,7 +9,7 @@ import { CreateCategoryComponent } from '../../categories/create-category/create
 import { MessageComponent } from './../../../message/message.component';
 import { Router } from '@angular/router';
 import { IProductType } from './../../model/Products';
-
+import {Observable} from 'rxjs';
 
 @Component({
   selector: 'app-create-product',
@@ -29,6 +29,12 @@ export class CreateProductComponent implements OnInit {
   public color: ThemePalette = "primary";
   public sizeList: Array<Number> = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15];
 
+  public imagesList: Array<String|ArrayBuffer>;
+  public imagesLink: Array<String>;
+  public imagesCount: number;
+  
+  public imageLinks: Array<String>;
+
   public productType: Array<IProductType> = [
     { id: 0, name: "Normal" },
     { id: 1, name: "Mask" }
@@ -46,7 +52,11 @@ export class CreateProductComponent implements OnInit {
 
   ngOnInit(): void {
     this.formGroup = this.prodService.form;
-    this.fetchCat()
+    this.fetchCat();
+    this.imagesLink = [];
+    this.imagesList = [];
+    this.imagesCount = 0;
+    this.imageLinks = [];
   }
 
   fetchCat() {
@@ -61,14 +71,13 @@ export class CreateProductComponent implements OnInit {
   }
 
   save() {
-    this.isLoading = true;
-    this.isSubmit = true;
-    if (this.formGroup.valid) {
+    // this.isLoading = true;
+    // this.isSubmit = true;
+    // if (this.formGroup.valid) {
       this.prodService.saveProduct(this.formGroup.value)
         .subscribe(response => {
           this.isLoading = false;
           // success
-          // console.log(response);
           this.close();
 
         }, err => {
@@ -90,44 +99,51 @@ export class CreateProductComponent implements OnInit {
           }
 
         })
-    }
+    // }
   }
 
   upload() {
     const fileUpload = this.fileUpload.nativeElement;
 
     fileUpload.onchange = () => {
-      // for (let index = 0; index < fileUpload.files.length; index++) {
-      if (fileUpload.files[0]) {
-        const file = fileUpload.files[0];
-        // this.files.push(file);
-        // }
-        // this.uploadFiles();
-        this.uploadFile(file);
-      }
+      if (fileUpload.files.length > 0) {
+        this.imagesCount = fileUpload.files.length;
+        Array.prototype.forEach.call(fileUpload.files, (file) => {
 
+          let reader = new FileReader();
+          reader.readAsDataURL(file);
+          reader.onloadend = (event) => {
+            this.imagesList.push(event.target.result);
+          }
+
+        })
+        // this.uploadFile(file);
+      }
     };
 
     fileUpload.click();
   }
 
-  // private uploadFiles() {
-  //   this.fileUpload.nativeElement.value = '';
-  //   this.files.forEach(file => {
-  //     this.uploadFile(file);
-  //   });
-  // }
-
-  uploadFile(file) {
+  uploadFiles() {
     // console.log(file);
     this.isLoading = true;
-    this.uploadService.upload('products', file)
+    this.isSubmit = true;
+    if(this.formGroup.invalid){
+      return;
+    }
+    Array.prototype.forEach.call(this.fileUpload.nativeElement.files, (file) => {
+      this.uploadService.upload('products', file)
       .subscribe(data => {
-        this.isLoading = false;
+        // this.isLoading = false;
         // add in formfield
         // console.log(data);
-        this.image = data.Location
-        this.formGroup.get('primary_pic').setValue(this.image);
+        // this.image = data.Location
+        this.imageLinks.push(data.Location)
+        this.imagesCount -= 1;
+        if(this.imagesCount === 0){
+          this.formGroup.get('primary_pic').setValue(this.imageLinks);
+          this.save();
+        }
       },
         err => {
           this.isLoading = false;
@@ -135,8 +151,9 @@ export class CreateProductComponent implements OnInit {
           // error caused while uploading
           // console.log(err);
           this.image = "";
-
         })
+    })
+    
   }
 
   resetAll() {
