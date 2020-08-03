@@ -27,9 +27,9 @@ export class ProductService {
   });
 
   getProducts(
-    skip: Number,
-    limit: Number,
-    filter: String = ''
+    skip: number,
+    limit: number,
+    filter: string = ''
   ): Observable<any> {
     let params: HttpParams = new HttpParams();
 
